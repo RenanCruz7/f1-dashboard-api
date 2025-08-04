@@ -1,19 +1,33 @@
-import { Body, Controller, Delete, Get, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import type { CreatePilotDTO } from "../dtos/CreatePilotDTO";
+import { PilotsService } from "../services/PilotsService";
 
 @Controller('pilots')
 export class PilotsController {
+    constructor(private readonly pilotsService: PilotsService) {}
+
     @Get()
-    findAll(): string{
-        return 'this action return all pilots'
+    findAll() {
+        return this.pilotsService.findAll();
     }
+
     @Post()
-    create(@Body() createPilotDTO: CreatePilotDTO){
-        return createPilotDTO
+    create(@Body() createPilotDTO: CreatePilotDTO) {
+        return this.pilotsService.create(createPilotDTO);
     }
     
-    @Get()
-    findPilotById(){
-        return 'This action return one pilot by his ID'
+    @Get(':id')
+    findPilotById(@Param('id') id: string) {
+        return this.pilotsService.findOne(id);
+    }
+
+    @Put(':id')
+    update(@Param('id') id: string, @Body() updatePilotDTO: Partial<CreatePilotDTO>) {
+        return this.pilotsService.update(id, updatePilotDTO);
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.pilotsService.remove(id);
     }
 }

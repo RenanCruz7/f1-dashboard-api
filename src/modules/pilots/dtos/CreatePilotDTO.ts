@@ -1,7 +1,7 @@
 export interface CreatePilotDTO{
     name: string,
-    age: string,
+    age: number,
     team: string,
-    wins: number,
-    podiums: number
+    wins?: number,
+    podiums?: number
 }
