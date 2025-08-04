@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post } from "@nestjs/common";
 import type { CreatePilotDTO } from "../dtos/CreatePilotDTO";
 
 @Controller('pilots')
@@ -10,5 +10,10 @@ export class PilotsController {
     @Post()
     create(@Body() createPilotDTO: CreatePilotDTO){
         return createPilotDTO
+    }
+    
+    @Get()
+    findPilotById(){
+        return 'This action return one pilot by his ID'
     }
 }
