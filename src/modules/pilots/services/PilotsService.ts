@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import type { IPilotsRepository } from '../repositories/IPilotsRepository';
 import { Pilot } from '../models/Pilot.entity';
 import type { CreatePilotDTO } from '../dtos/CreatePilotDTO';
 import type { UpdatePilotDTO } from '../dtos/UpdatePilotDTO';
@@ -8,35 +7,43 @@ import type { UpdatePilotDTO } from '../dtos/UpdatePilotDTO';
 @Injectable()
 export class PilotsService {
   constructor(
-    @InjectRepository(Pilot)
-    private pilotsRepository: Repository<Pilot>,
+    @Inject('IPilotsRepository')
+    private readonly pilotsRepository: IPilotsRepository
   ) {}
 
   async findAll(): Promise<Pilot[]> {
-    return await this.pilotsRepository.find();
+    return await this.pilotsRepository.findAll();
   }
 
   async findOne(id: string): Promise<Pilot> {
-    const pilot = await this.pilotsRepository.findOne({ where: { id } });
+    const pilot = await this.pilotsRepository.findOne(id);
     if (!pilot) {
       throw new NotFoundException(`Pilot with ID ${id} not found`);
     }
     return pilot;
   }
 
+  async findByTeam(team: string): Promise<Pilot[]> {
+    return await this.pilotsRepository.findByTeam(team);
+  }
+
   async create(createPilotDTO: CreatePilotDTO): Promise<Pilot> {
-    const pilot = this.pilotsRepository.create(createPilotDTO);
-    return await this.pilotsRepository.save(pilot);
+    return await this.pilotsRepository.create(createPilotDTO);
   }
 
   async update(id: string, updatePilotDTO: UpdatePilotDTO): Promise<Pilot> {
-    const pilot = await this.findOne(id);
-    Object.assign(pilot, updatePilotDTO);
-    return await this.pilotsRepository.save(pilot);
+    const exists = await this.pilotsRepository.exists(id);
+    if (!exists) {
+      throw new NotFoundException(`Pilot with ID ${id} not found`);
+    }
+    return await this.pilotsRepository.update(id, updatePilotDTO);
   }
 
   async remove(id: string): Promise<void> {
-    const pilot = await this.findOne(id);
-    await this.pilotsRepository.remove(pilot);
+    const exists = await this.pilotsRepository.exists(id);
+    if (!exists) {
+      throw new NotFoundException(`Pilot with ID ${id} not found`);
+    }
+    await this.pilotsRepository.remove(id);
   }
 }
