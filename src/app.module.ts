@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PilotsModule } from './modules/pilots/PilotsModule';
 import { Pilot } from './modules/pilots/models/Pilot.entity';
+import { TeamsModule } from './modules/team/TeamsModule';
 
 @Module({
   imports: [
@@ -19,11 +20,12 @@ import { Pilot } from './modules/pilots/models/Pilot.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [Pilot],
-        synchronize: true, // Apenas para desenvolvimento! Em produção use migrations
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
     PilotsModule,
+    TeamsModule
   ],
   controllers: [],
   providers: [],
