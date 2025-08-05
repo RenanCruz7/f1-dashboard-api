@@ -1,5 +1,5 @@
 # Use a imagem oficial do Node.js como base
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # Instala dependências necessárias para o PostgreSQL
 RUN apk add --no-cache libc6-compat
@@ -27,7 +27,7 @@ COPY . .
 RUN npm run build
 
 # Stage para produção
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
 
 # Cria usuário não-root para segurança
 RUN addgroup -g 1001 -S nodejs
