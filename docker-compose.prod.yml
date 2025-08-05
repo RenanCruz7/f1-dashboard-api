@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Serviço do PostgreSQL para produção
+  postgres:
+    image: postgres:15-alpine
+    container_name: f1-dashboard-postgres-prod
+    restart: always
+    environment:
+      POSTGRES_DB: f1_dashboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-your_secure_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - f1-network-prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Serviço da API NestJS para produção
+  api:
+    build:
+      context: .
+      target: production
+    container_name: f1-dashboard-api-prod
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-your_secure_password}
+      DB_NAME: f1_dashboard
+      PORT: 3000
+    networks:
+      - f1-network-prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+# Volumes para persistir dados em produção
+volumes:
+  postgres_data_prod:
+    driver: local
+
+# Rede para produção
+networks:
+  f1-network-prod:
+    driver: bridge

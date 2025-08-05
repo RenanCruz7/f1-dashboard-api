@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import type { CreatePilotDTO } from "../dtos/CreatePilotDTO";
+import type { UpdatePilotDTO } from "../dtos/UpdatePilotDTO";
 import { PilotsService } from "../services/PilotsService";
 
 @Controller('pilots')
@@ -22,7 +23,7 @@ export class PilotsController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() updatePilotDTO: Partial<CreatePilotDTO>) {
+    update(@Param('id') id: string, @Body() updatePilotDTO: UpdatePilotDTO) {
         return this.pilotsService.update(id, updatePilotDTO);
     }
 

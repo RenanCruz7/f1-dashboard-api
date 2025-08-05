@@ -1,6 +1,7 @@
 export interface UpdatePilotDTO {
-    age?: string,
-    team?: string,
-    wins?: number,
-    podiums?: number
+    name?: string;
+    age?: number;
+    team?: string;
+    wins?: number;
+    podiums?: number;
 }
