@@ -30,7 +30,7 @@ export class TypeOrmTeamsRepository implements ITeamsRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const result = await this.typeormRepository.delete(id);
-    return result.affected > 0;
+  const result = await this.typeormRepository.delete(id);
+  return (result.affected ?? 0) > 0;
   }
 }
