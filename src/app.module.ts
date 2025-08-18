@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PilotsModule } from './modules/pilots/PilotsModule';
 import { Pilot } from './modules/pilots/models/Pilot.entity';
 import { TeamsModule } from './modules/team/TeamsModule';
+import { Team } from './modules/team/models/Team.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { TeamsModule } from './modules/team/TeamsModule';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Pilot],
+        entities: [Pilot, Team],
         synchronize: true,
       }),
       inject: [ConfigService],

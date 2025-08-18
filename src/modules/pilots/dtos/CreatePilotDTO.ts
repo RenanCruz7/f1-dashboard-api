@@ -1,12 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, IsNumber, IsOptional, Min, Max } from 'class-validator';
 
-export class CreatePilotDTO {
     @ApiProperty({
         description: 'Nome completo do piloto',
         example: 'Lewis Hamilton',
         minLength: 2,
         maxLength: 100
     })
+    @IsNotEmpty()
+    @IsString()
     name: string;
 
     @ApiProperty({
@@ -15,6 +17,10 @@ export class CreatePilotDTO {
         minimum: 18,
         maximum: 50
     })
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(18)
+    @Max(50)
     age: number;
 
     @ApiProperty({
@@ -22,6 +28,8 @@ export class CreatePilotDTO {
         example: 'Mercedes',
         maxLength: 50
     })
+    @IsNotEmpty()
+    @IsString()
     team: string;
 
     @ApiPropertyOptional({
@@ -30,6 +38,8 @@ export class CreatePilotDTO {
         minimum: 0,
         default: 0
     })
+    @IsOptional()
+    @IsNumber()
     wins?: number;
 
     @ApiPropertyOptional({
@@ -38,5 +48,7 @@ export class CreatePilotDTO {
         minimum: 0,
         default: 0
     })
+    @IsOptional()
+    @IsNumber()
     podiums?: number;
 }

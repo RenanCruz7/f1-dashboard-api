@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateTeamDTO {
     @ApiProperty({
@@ -7,6 +8,8 @@ export class CreateTeamDTO {
         minLength: 2,
         maxLength: 100
     })
+    @IsNotEmpty()
+    @IsString()
     name: string;
 
     @ApiPropertyOptional({
@@ -14,6 +17,8 @@ export class CreateTeamDTO {
         example: 'Brackley, Reino Unido',
         maxLength: 100
     })
+    @IsOptional()
+    @IsString()
     headquarters?: string;
 
     @ApiProperty({
@@ -21,6 +26,8 @@ export class CreateTeamDTO {
         example: 8,
         minimum: 0
     })
+    @IsNotEmpty()
+    @IsNumber()
     constructor_titles: number;
 
     @ApiProperty({
@@ -28,6 +35,8 @@ export class CreateTeamDTO {
         example: 620.5,
         minimum: 0
     })
+    @IsNotEmpty()
+    @IsNumber()
     points: number;
 
     @ApiPropertyOptional({
@@ -35,6 +44,7 @@ export class CreateTeamDTO {
         example: 'Toto Wolff',
         maxLength: 100
     })
+    @IsOptional()
+    @IsString()
     manager?: string;
-
 }
