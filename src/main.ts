@@ -1,9 +1,28 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configuração do ValidationPipe com opções melhoradas
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // Remove campos não definidos no DTO
+    transform: true, // Transforma dados conforme os tipos nos DTOs
+    forbidNonWhitelisted: true, // Rejeita requisições com campos não definidos
+    transformOptions: {
+      enableImplicitConversion: true // Converte tipos automaticamente quando possível
+    }
+  }));
+
+  // Aplicar filtro global de exceções
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Aplicar interceptor de transformação
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   // Configuração do Swagger
   const config = new DocumentBuilder()

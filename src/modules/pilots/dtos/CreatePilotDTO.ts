@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsNumber, IsOptional, Min, Max } from 'class-validator';
 
+export class CreatePilotDTO {
     @ApiProperty({
         description: 'Nome completo do piloto',
         example: 'Lewis Hamilton',
